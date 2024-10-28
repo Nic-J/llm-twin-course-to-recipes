@@ -32,8 +32,8 @@ jobs:
         id: build-image
         uses: docker/build-push-action@v4
         with:
-          context: data_crawling
-          file: Dockerfile
+          context: ./data_crawling
+          file: ./data_crawling/Dockerfile
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/crawler:${{ github.sha }}
             ${{ steps.login-ecr.outputs.registry }}/crawler:latest

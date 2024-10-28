@@ -1,7 +1,7 @@
 name: Crawlers
 
 env:
-  ACTIONS_STEP_DEBUG: true
+  ACTIONS_STEP_DEBUG: false # enable to get detailed logs
 
 permissions:
   id-token: write
@@ -35,8 +35,8 @@ jobs:
           # context: ./data_crawling
           file: ./data_crawling/Dockerfile
           tags: |
-            ${{ steps.login-ecr.outputs.registry }}/crawler:${{ github.sha }}
-            ${{ steps.login-ecr.outputs.registry }}/crawler:latest
+            ${{ steps.login-ecr.outputs.registry }}/llm-course/crawler:${{ github.sha }}
+            ${{ steps.login-ecr.outputs.registry }}/llm-course/crawler:latest
           push: true
 
   deploy:

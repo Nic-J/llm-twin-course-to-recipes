@@ -17,6 +17,8 @@ jobs:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
     steps:
+      - name: list files in current directory
+        run: ls -R
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Configure AWS credentials

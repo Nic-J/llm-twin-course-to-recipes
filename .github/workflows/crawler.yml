@@ -58,7 +58,7 @@ jobs:
           echo "Updating lambda with new image version $ECR_REPOSITORY/llm-course/crawler:$PROJECT_VERSION..."
           aws lambda update-function-code \
               --function-name "arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:llm-course-crawler-function" \
-              --image-uri $ECR_REPOSITORY/crawler:$PROJECT_VERSION
+              --image-uri $ECR_REPOSITORY/llm-course/crawler:$PROJECT_VERSION
           echo "Successfully updated lambda"
         env:
           AWS_REGION: ${{ secrets.AWS_REGION }}

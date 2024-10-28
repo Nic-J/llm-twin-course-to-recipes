@@ -1,9 +1,7 @@
-version: '3.8'
-
 services:
   mongo1:
     image: mongo:5
-    container_name: llm-twin-mongo1
+    container_name: mongo1
     command: ["--replSet", "my-replica-set", "--bind_ip_all", "--port", "30001"]
     volumes:
       - mongo-replica-1-data:/data/db
@@ -17,7 +15,7 @@ services:
 
   mongo2:
     image: mongo:5
-    container_name: llm-twin-mongo2
+    container_name: mongo2
     command: ["--replSet", "my-replica-set", "--bind_ip_all", "--port", "30002"]
     volumes:
       - mongo-replica-2-data:/data/db
@@ -27,7 +25,7 @@ services:
 
   mongo3:
     image: mongo:5
-    container_name: llm-twin-mongo3
+    container_name: mongo3
     command: ["--replSet", "my-replica-set", "--bind_ip_all", "--port", "30003"]
     volumes:
       - mongo-replica-3-data:/data/db
@@ -37,7 +35,7 @@ services:
 
   mq:
     image: rabbitmq:3-management-alpine
-    container_name: llm-twin-mq
+    container_name: mq
     ports:
       - "5673:5672"
       - "15673:15672"
@@ -48,7 +46,7 @@ services:
 
   qdrant:
     image: qdrant/qdrant:latest
-    container_name: llm-twin-qdrant
+    container_name: qdrant
     ports:
       - "6333:6333"
       - "6334:6334"
@@ -61,12 +59,12 @@ services:
     restart: always
 
   crawler:
-    image: "llm-twin-crawler"
-    container_name: llm-twin-crawler
+    image: "crawler"
+    container_name: crawler
     platform: "linux/amd64"
     build:
       context: .
-      dockerfile: .docker/Dockerfile.crawlers
+      dockerfile: data_crawling/Dockerfile
     env_file:
       - .env
     ports:
@@ -77,11 +75,11 @@ services:
       - mongo3
 
   cdc:
-    image: "llm-twin-cdc"
-    container_name: llm-twin-cdc
+    image: "cdc"
+    container_name: cdc
     build:
       context: .
-      dockerfile: .docker/Dockerfile.cdc
+      dockerfile: data_ingestion/Dockerfile
     env_file:
       - .env
     depends_on:
@@ -91,11 +89,11 @@ services:
       - mq
 
   bytewax:
-    image: "llm-twin-bytewax"
-    container_name: llm-twin-bytewax
+    image: "bytewax"
+    container_name: bytewax
     build:
       context: .
-      dockerfile: .docker/Dockerfile.bytewax
+      dockerfile: .feature_pipeline/Dockerfile
     environment:
       BYTEWAX_PYTHON_FILE_PATH: "main:flow"
       DEBUG: "false"

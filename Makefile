@@ -55,6 +55,13 @@ cloud-test-github: # Send command to the cloud lambda with a Github repository
 		--payload '{"user": "Paul Iuztin", "link": "https://github.com/decodingml/llm-twin-course"}' \
 		response.json
 
+cloud-test-medium:
+	aws lambda invoke \
+		--function-name crawler \
+		--cli-binary-format raw-in-base64-out \
+		--payload '{"user": "Paul Iuztin", "link": "https://medium.com/decodingml/an-end-to-end-framework-for-production-ready-llm-systems-by-building-your-llm-twin-2cc6bb01141f"}' \
+		response.json
+
 # ------ RAG Feature Pipeline ------
 
 local-feature-pipeline: # Run the RAG feature pipeline

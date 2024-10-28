@@ -1,5 +1,9 @@
 name: Crawlers
 
+permissions:
+  id-token: write
+  contents: read
+
 on:
   push:
     branches:
@@ -13,10 +17,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          audience: sts.amazonaws.com
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Login to Amazon ECR
         id: login-ecr
@@ -25,8 +29,8 @@ jobs:
         id: build-image
         uses: docker/build-push-action@v4
         with:
-          context: ./course/module-1
-          file: ./course/module-1/Dockerfile
+          context: ./data_crawling
+          file: ./data_crawling/Dockerfile
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/crawler:${{ github.sha }}
             ${{ steps.login-ecr.outputs.registry }}/crawler:latest
@@ -40,8 +44,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          audience: sts.amazonaws.com
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Deploy Lambda Image
         id: deploy-lambda

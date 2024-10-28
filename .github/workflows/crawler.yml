@@ -28,6 +28,8 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: true
       - name: Build images & push to ECR
         id: build-image
         uses: docker/build-push-action@v4
@@ -53,9 +55,9 @@ jobs:
       - name: Deploy Lambda Image
         id: deploy-lambda
         run: |
-          echo "Updating lambda with new image version $ECR_REPOSITORY/crawler:$PROJECT_VERSION..."
+          echo "Updating lambda with new image version $ECR_REPOSITORY/llm-course/crawler:$PROJECT_VERSION..."
           aws lambda update-function-code \
-              --function-name "arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:crawler" \
+              --function-name "arn:aws:lambda:$AWS_REGION:$AWS_ACCOUNT_ID:function:llm-course-crawler-function" \
               --image-uri $ECR_REPOSITORY/crawler:$PROJECT_VERSION
           echo "Successfully updated lambda"
         env:

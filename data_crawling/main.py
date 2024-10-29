@@ -42,4 +42,5 @@ if __name__ == "__main__":
         "user": "Nicolas Jadot",
         "link": "https://www.linkedin.com/in/njadot/",
     }
+
     handler(event, None)

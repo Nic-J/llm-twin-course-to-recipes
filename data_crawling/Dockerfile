@@ -7,7 +7,7 @@ RUN yum install -y unzip && \
     unzip /tmp/chromedriver.zip -d /opt/ && \
     unzip /tmp/chrome-linux.zip -d /opt/
 
-FROM  public.ecr.aws/lambda/python:3.11
+FROM  public.ecr.aws/lambda/python:3.11-arm64
 
 # Install the function's OS dependencies using yum
 RUN yum install -y \

@@ -1,4 +1,4 @@
-FROM  public.ecr.aws/lambda/python:3.11 as build
+FROM  public.ecr.aws/lambda/python:3.11-arm64 as build
 
 # Install chrome driver and browser
 RUN yum install -y unzip && \
